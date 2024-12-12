@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de Fuentes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #6CA6CD; /* Celeste */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        header h1, header h2, header h3 {
+            margin: 0;
+        }
+        header h2 {
+            font-size: 1.2rem;
+        }
+        header h3 {
+            font-size: 0.9rem;
+        }
+        .news-tabs {
+            display: flex;
+            padding: 10px;
+            background-color: #ddd;
+        }
+        .news-tab {
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: #bbb;
+            border-radius: 5px;
+        }
+        .news-tab.active {
+            background-color: #5F9EA0; /* Azul oscuro */
+            color: white;
+        }
+        .content {
+            padding: 20px;
+        }
+        .form-container {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-container label {
+            display: block;
+            margin-top: 10px;
+        }
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #6CA6CD; /* Celeste */
+            color: white;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #5F9EA0; /* Celeste para botones */
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #76B4BD; /* Hover */
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #222;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TU PÁGINA PARA CLASIFICAR LAS FUENTES (1º de Periodismo)</h1>
+        <h2>En base a los criterios de Antonio Méndez Nieto y Lucía Ballesteros Aguayo</h2>
+        <h3>Un sitio web creado por NICOSTUDIOS Productora Audiovisual</h3>
+    </header>
+
+    <div class="news-tabs">
+        <div class="news-tab active" onclick="switchTab('Noticia 1')">Noticia 1</div>
+        <div class="button" onclick="addNews()">Añadir noticia</div>
+    </div>
+
+    <div class="content">
+        <div id="Noticia 1" class="news-content">
+            <div class="button" onclick="openForm('Noticia 1')">Añadir fuente</div>
+            <div class="button" onclick="shareNews('Noticia 1')">Compartir</div>
+            <div class="form-container" id="form-Noticia 1">
+                <label for="source-number">Nº de la fuente</label>
+                <input type="text" id="source-number-Noticia 1">
+                <label for="source-text">Introduce la fuente como se cita en el texto</label>
+                <textarea id="source-text-Noticia 1"></textarea>
+                <label for="source-attribution">Atribución</label>
+                <input type="text" id="source-attribution-Noticia 1">
+                <label for="source-nature">Según su naturaleza</label>
+                <input type="text" id="source-nature-Noticia 1">
+                <label for="source-origin">Según su origen o cercanía a los hechos</label>
+                <input type="text" id="source-origin-Noticia 1">
+                <label for="source-importance">En función de su importancia en la información</label>
+                <input type="text" id="source-importance-Noticia 1">
+                <label for="source-scope">Según el ámbito de procedencia</label>
+                <input type="text" id="source-scope-Noticia 1">
+                <label for="source-quality">Según la calidad de fuente</label>
+                <input type="text" id="source-quality-Noticia 1">
+                <label for="source-representativity">Grado de representatividad o interlocución de las fuentes</label>
+                <input type="text" id="source-representativity-Noticia 1">
+                <label for="source-citation">Forma de citar la fuente (opcional)</label>
+                <input type="text" id="source-citation-Noticia 1" placeholder="Directa, indirecta o mixta">
+                <div class="button" onclick="saveSource('Noticia 1')">Guardar</div>
+            </div>
+            <table id="table-Noticia 1">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Texto</th>
+                        <th>Atribución</th>
+                        <th>Naturaleza</th>
+                        <th>Origen</th>
+                        <th>Importancia</th>
+                        <th>Ámbito</th>
+                        <th>Calidad</th>
+                        <th>Representatividad</th>
+                        <th>Citación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        Un sitio web creado por Nicolás Servia con ayuda de la IA | (C) 2024
+    </footer>
+
+    <script>
+        let currentTab = 'Noticia 1';
+        const maxNews = 50;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.news-tab').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.news-content').forEach(e => e.style.display = 'none');
+
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(tab).style.display = 'block';
+            currentTab = tab;
+        }
+
+        function addNews() {
+            if (document.querySelectorAll('.news-tab').length >= maxNews) {
+                alert('Máximo de noticias alcanzado');
+                return;
+            }
+
+            const title = prompt('Título de la noticia:');
+            if (!title) return;
+
+            const tab = document.createElement('div');
+            tab.className = 'news-tab';
+            tab.textContent = title;
+            tab.setAttribute('onclick', `switchTab('${title}')`);
+
+            const content = document.createElement('div');
+            content.id = title;
+            content.className = 'news-content';
+            content.innerHTML = document.getElementById('Noticia 1').innerHTML.replaceAll('Noticia 1', title);
+
+            document.querySelector('.news-tabs').appendChild(tab);
+            document.querySelector('.content').appendChild(content);
+        }
+
+        function openForm(tab) {
+            document.getElementById(`form-${tab}`).style.display = 'block';
+        }
+
+        function saveSource(tab) {
+            const tableBody = document.getElementById(`table-${tab}`).querySelector('tbody');
+            const row = document.createElement('tr');
+
+            ['source-number', 'source-text', 'source-attribution', 'source-nature',
+             'source-origin', 'source-importance', 'source-scope',
+             'source-quality', 'source-representativity', 'source-citation']
+            .forEach(id => {
+                const td = document.createElement('td');
+                td.textContent = document.getElementById(`${id}-${tab}`).value;
+                row.appendChild(td);
+            });
+
+            const actions = document.createElement('td');
+            actions.innerHTML = `
+                <div class="button" onclick="editRow(this, '${tab}')">Editar</div>
+                <div class="button" onclick="deleteRow(this)">Eliminar</div>
+            `;
+            row.appendChild(actions);
+
+            tableBody.appendChild(row);
+            document.getElementById(`form-${tab}`).style.display = 'none';
+        }
+
+        function editRow(button, tab) {
+            const cells = button.closest('tr').querySelectorAll('td');
+            ['source-number', 'source-text', 'source-attribution', 'source-nature',
+             'source-origin', 'source-importance', 'source-scope',
+             'source-quality', 'source-representativity', 'source-citation']
+            .forEach((id, i) => {
+                document.getElementById(`${id}-${tab}`).value = cells[i].textContent;
+            });
+            button.closest('tr').remove();
+            openForm(tab);
+        }
+
+        function deleteRow(button) {
+            button.closest('tr').remove();
+        }
+
+        function shareNews(tab) {
+            const url = `${window.location.href.split('?')[0]}?news=${encodeURIComponent(tab)}`;
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = '#fff';
+            popup.style.padding = '20px';
+            popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+            popup.style.zIndex = 1000;
+
+            popup.innerHTML = `
+                <p>El enlace para compartir la noticia es el siguiente:</p>
+                <input type="text" value="${url}" readonly style="width: 100%; margin-bottom: 10px;">
+                <div class="button" onclick="copyToClipboard('${url}')">Copiar</div>
+                <div class="button" onclick="this.parentElement.remove()">Cerrar</div>
+            `;
+
+            document.body.appendChild(popup);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert('¡Enlace copiado!'));
+        }
+    </script>
+</body>
+</html>
